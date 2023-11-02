@@ -1,0 +1,784 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "16680871",
+   "metadata": {},
+   "source": [
+    "# BuyerRatio dataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "8f310772",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np \n",
+    "import pandas as pd\n",
+    "from scipy.stats import stats\n",
+    "import math\n",
+    "from scipy.stats import chi2_contingency\n",
+    "from scipy.stats import chi2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "d8a95a59",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Observed Values</th>\n",
+       "      <th>East</th>\n",
+       "      <th>West</th>\n",
+       "      <th>North</th>\n",
+       "      <th>South</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Males</td>\n",
+       "      <td>50</td>\n",
+       "      <td>142</td>\n",
+       "      <td>131</td>\n",
+       "      <td>70</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Females</td>\n",
+       "      <td>435</td>\n",
+       "      <td>1523</td>\n",
+       "      <td>1356</td>\n",
+       "      <td>750</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "  Observed Values  East  West  North  South\n",
+       "0           Males    50   142    131     70\n",
+       "1         Females   435  1523   1356    750"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "ratio =pd.read_csv(\"C:\\\\Users\\Admin\\Downloads\\\\BuyerRatio (1).csv\")\n",
+    "ratio.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "1e29bf1f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ratio=ratio.drop(['Observed Values'], axis=1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "7931ff93",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "males = ratio.iloc[0]\n",
+    "females = ratio.iloc[1]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "80e948ee",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "males = np.array(males)\n",
+    "females = np.array(females)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "cfaa60ba",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "observed_values = np.array([males,females])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "3ac65f9e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[  50,  142,  131,   70],\n",
+       "       [ 435, 1523, 1356,  750]], dtype=int64)"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "observed_values "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "52d37562",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "val = chi2_contingency(ratio)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "4ff1e974",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Chi2ContingencyResult(statistic=1.595945538661058, pvalue=0.6603094907091882, dof=3, expected_freq=array([[  42.76531299,  146.81287862,  131.11756787,   72.30424052],\n",
+       "       [ 442.23468701, 1518.18712138, 1355.88243213,  747.69575948]]))"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "val"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "58ab2314",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[  42.76531299,  146.81287862,  131.11756787,   72.30424052],\n",
+       "       [ 442.23468701, 1518.18712138, 1355.88243213,  747.69575948]])"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "expected_values = val[3]\n",
+    "expected_values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "be744a6c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Degree of freedom =  3\n"
+     ]
+    }
+   ],
+   "source": [
+    "# degree of freedom = (no of rows-1) * (no of columns)\n",
+    "ddof = (2-1)*(4-1)\n",
+    "print('Degree of freedom = ',ddof)\n",
+    "alpha = 0.05"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "900b2c4b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# now applying the chi square test\n",
+    "chi_square = sum([((o-e)**2)/e for o,e in zip(observed_values,expected_values)])\n",
+    "chi_square_stats=chi_square[0]+chi_square[1]+chi_square[2]+chi_square[3]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "5474fef7",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "1.5959455386610577"
+      ]
+     },
+     "execution_count": 13,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "chi_square_stats"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "f0f1dc0b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Critical value is : 7.814727903251179\n"
+     ]
+    }
+   ],
+   "source": [
+    "critical_value = chi2.ppf(q = 1-alpha,df=ddof)\n",
+    "print('Critical value is :',critical_value)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "c42b6435",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "p-value :  0.3396905092908118\n",
+      "Significance level :  0.05\n",
+      "Degree of freedom :  3\n"
+     ]
+    }
+   ],
+   "source": [
+    "p_value = chi2.cdf(x=chi_square_stats, df= ddof)\n",
+    "print('p-value : ',p_value)\n",
+    "print('Significance level : ',alpha)\n",
+    "print('Degree of freedom : ',ddof)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "4bceb63e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Reject alternate hypothesis and accept null hypothesis, Not all proportions are equal\n",
+      "Reject alternate hypothesis and accept null hypothesis, Not all proportions are equal\n"
+     ]
+    }
+   ],
+   "source": [
+    "if chi_square_stats>=critical_value:\n",
+    "    print('Reject null hypothesis and accept alternate hypothesis, All proportions are equal')\n",
+    "else:\n",
+    "    print('Reject alternate hypothesis and accept null hypothesis, Not all proportions are equal')\n",
+    "\n",
+    "if p_value<=alpha:\n",
+    "    print('Reject null hypothesis and accept alternate hypothesis, All proportions are equal')\n",
+    "else:\n",
+    "    print('Reject alternate hypothesis and accept null hypothesis, Not all proportions are equal')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2a3d6602",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "02569e4e",
+   "metadata": {},
+   "source": [
+    "# Costomer+OrderForm Dataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "60121128",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import scipy.stats as stats\n",
+    "import scipy\n",
+    "from scipy.stats import chi2_contingency\n",
+    "from scipy.stats import chi2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "9e9e24b8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Null hypothesis is that defective percentage does not varies from  center to center.\n",
+    "# Alternate hypothesis is that defective percentage varies from center to center."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "f2c878a4",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Phillippines</th>\n",
+       "      <th>Indonesia</th>\n",
+       "      <th>Malta</th>\n",
+       "      <th>India</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "  Phillippines   Indonesia       Malta       India\n",
+       "0   Error Free  Error Free   Defective  Error Free\n",
+       "1   Error Free  Error Free  Error Free   Defective\n",
+       "2   Error Free   Defective   Defective  Error Free\n",
+       "3   Error Free  Error Free  Error Free  Error Free\n",
+       "4   Error Free  Error Free   Defective  Error Free"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data = pd.read_csv(\"C:\\\\Users\\Admin\\Downloads\\\\Costomer+OrderForm (1).csv\")\n",
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "942625c5",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Phillippines\n",
+       "Error Free    271\n",
+       "Defective      29\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.Phillippines.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "48e09c6c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Indonesia\n",
+       "Error Free    267\n",
+       "Defective      33\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.Indonesia.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "df5fe023",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Malta\n",
+       "Error Free    269\n",
+       "Defective      31\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.Malta.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "910cd060",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "India\n",
+       "Error Free    280\n",
+       "Defective      20\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.India.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "8774eadb",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[ 29,  33,  31,  20],\n",
+       "       [271, 267, 269, 280]])"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# So now we have to make a contingency table\n",
+    "observed_values = np.array([[29,33,31,20],[271,267,269,280]])\n",
+    "observed_values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "61f76ee6",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Chi2ContingencyResult(statistic=3.858960685820355, pvalue=0.2771020991233135, dof=3, expected_freq=array([[ 28.25,  28.25,  28.25,  28.25],\n",
+       "       [271.75, 271.75, 271.75, 271.75]]))"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "val = chi2_contingency(observed_values)\n",
+    "val"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "d92ce604",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[ 28.25,  28.25,  28.25,  28.25],\n",
+       "       [271.75, 271.75, 271.75, 271.75]])"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "expected_values = val[3]\n",
+    "expected_values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "f538150b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Degree of freedom =  3\n"
+     ]
+    }
+   ],
+   "source": [
+    "# degree of freedom = (no of rows-1) * (no of columns)\n",
+    "ddof = (2-1)*(4-1)\n",
+    "print('Degree of freedom = ',ddof)\n",
+    "alpha = 0.05"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "c2ef089b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "3.8589606858203545"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# now applying the chi square test\n",
+    "chi_square = sum([((o-e)**2)/e for o,e in zip(observed_values,expected_values)])\n",
+    "chi_square_stats=chi_square[0]+chi_square[1]+chi_square[2]+chi_square[3]\n",
+    "chi_square_stats"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "27fcc590",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Critical value is : 7.814727903251179\n"
+     ]
+    }
+   ],
+   "source": [
+    "critical_value = chi2.ppf(q = 1-alpha,df=ddof)\n",
+    "print('Critical value is :',critical_value)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "70861a4d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "p-value :  0.7228979008766856\n",
+      "Significance level :  0.05\n",
+      "Degree of freedom :  3\n"
+     ]
+    }
+   ],
+   "source": [
+    "p_value = chi2.cdf(x=chi_square_stats, df= ddof)\n",
+    "print('p-value : ',p_value)\n",
+    "print('Significance level : ',alpha)\n",
+    "print('Degree of freedom : ',ddof)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "660be20f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Fail to reject the null hypothesis. There isn't enough evidence of a significant difference.\n",
+      "Managerial recommendation: No immediate action required. Continue monitoring the process.\n"
+     ]
+    }
+   ],
+   "source": [
+    "if p_value < alpha:\n",
+    "    print(\"Reject the null hypothesis. There is evidence of a significant difference.\")\n",
+    "else:\n",
+    "    print(\"Fail to reject the null hypothesis. There isn't enough evidence of a significant difference.\")\n",
+    "\n",
+    "# Managerial inference\n",
+    "if p_value < alpha:\n",
+    "    print(\"Managerial recommendation: Investigate further and take appropriate actions.\")\n",
+    "else:\n",
+    "    print(\"Managerial recommendation: No immediate action required. Continue monitoring the process.\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7a0bf075",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
